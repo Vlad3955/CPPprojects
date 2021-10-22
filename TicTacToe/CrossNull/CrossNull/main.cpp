@@ -137,8 +137,93 @@ void __fastcall drawGame(const Game &g)
 	cout << endl << "Челик: " << g.human << endl << "Ботик: " << g.ai << endl;
 }
 
+// Кто выиграл
 GameProgress __fastcall getWon(const Game& g)
 {
+	// Проверяем поле по строкам(Y) 
+	for (size_t y = 0; y < g.SIZE; y++)
+	{
+		if (g.ppField[y][0] == g.ppField[y][1] && g.ppField[y][0] == g.ppField[y][2])
+		{
+			if (g.ppField[y][0] == g.human)
+			{
+				return WON_HUMAN;
+			}
+
+			if (g.ppField[y][0] == g.ai)
+			{
+				return WON_AI;
+			}
+		}
+	}
+
+	// Проверяем поле по столбцам(X)
+	for (size_t x = 0; x < g.SIZE; x++)
+	{
+		if (g.ppField[0][x] == g.ppField[1][x] && g.ppField[0][x] == g.ppField[2][x])
+		{
+			if (g.ppField[0][x] == g.human)
+			{
+				return WON_HUMAN;
+			}
+
+			if (g.ppField[0][x] == g.ai)
+			{
+				return WON_AI;
+			}
+		}
+	}
+
+	// 1ая диагональ
+	if (g.ppField[0][0] == g.ppField[1][1] && g.ppField[0][0] == g.ppField[2][2])
+	{
+		if (g.ppField[1][1] == g.human)
+		{
+			return WON_HUMAN;
+		}
+
+		if (g.ppField[1][1] == g.ai)
+		{
+			return WON_AI;
+		}
+	}
+
+	// 2ая диагональ
+	if (g.ppField[2][0] == g.ppField[1][1] && g.ppField[1][1] == g.ppField[0][2])
+	{
+		if (g.ppField[1][1] == g.human)
+		{
+			return WON_HUMAN;
+		}
+
+		if (g.ppField[1][1] == g.ai)
+		{
+			return WON_AI;
+		}
+	}
+
+	// Проверка на ничью
+	bool draw = true;
+	for (size_t y = 0; y < g.SIZE; y++)
+	{
+		for (size_t x = 0; x < g.SIZE; x++)
+		{
+			if (g.ppField[y][x] == EMPTY)
+			{
+				draw = false;
+				break;
+			}
+		}
+		if (!draw)
+		{
+			break;
+		}
+	}
+
+	if (draw)
+	{
+		return DRAW;
+	}
 	return IN_PROGRESS;
 }
 
@@ -151,7 +236,7 @@ Coord __fastcall getHumanCoord(const Game& g)
 		cout << "Enter X (1..3): ";
 		cin >> c.x;
 		cout << "Enter y (1..3): ";
-		cin >> c.x;
+		cin >> c.y;
 		c.x--;
 		c.y--;
 	} while (c.x > 2 || c.y > 2 || g.ppField[c.y][c.x] != EMPTY);
@@ -161,7 +246,82 @@ Coord __fastcall getHumanCoord(const Game& g)
 
 Coord __fastcall getAICoord(const Game& g)
 {
+	if (g.ppField[1][1] == EMPTY)
+	{
+		return { 1, 1 };
+	}
 
+	Coord arr[4];
+	size_t num = 0;
+	if (g.ppField[0][0] == EMPTY) // Ищем все и сохраняем свободные углы
+	{
+		arr[num++] = { 0, 0 }; // сначало NUM используется(0), затем увеличивается на 1.
+	}
+
+	if (g.ppField[0][2] == EMPTY)
+	{
+		arr[num++] = { 0, 2 }; // NUM = 1(после использования = 2 и тд).
+	}
+
+	if (g.ppField[2][2] == EMPTY)
+	{
+		arr[num++] = { 2, 2 };
+	}
+
+	if (g.ppField[2][0] == EMPTY)
+	{
+		arr[num++] = { 2, 0 };
+	}
+
+	if (num > 0) // если есть свободные углы
+	{
+		const size_t index = getRundomNum(0, 1000) % num; // случайный индекс свободного угла
+		return arr[index];
+	}
+
+
+	// Не углы
+	if (g.ppField[0][1] == EMPTY)
+	{
+		arr[num++] = { 0, 1 }; 
+	}
+
+	if (g.ppField[1][2] == EMPTY)
+	{
+		arr[num++] = { 1, 2 }; 
+	}
+
+	if (g.ppField[2][1] == EMPTY)
+	{
+		arr[num++] = { 2, 1 };
+	}
+
+	if (g.ppField[1][0] == EMPTY)
+	{
+		arr[num++] = { 1, 0 };
+	}
+
+	if (num > 0) // если есть не свободные углы
+	{
+		const size_t index = getRundomNum(0, 1000) % num; // случайный индекс свободного не угла
+		return arr[index];
+	}
+}
+
+void __fastcall congrats(const Game& g)
+{
+	if (g.progress == WON_HUMAN)
+	{
+		cout << "Красаучык" << endl;
+	}
+	else if (g.progress == WON_AI)
+	{
+		cout << "Не красаучык" << endl;
+	}
+	else if (g.progress == DRAW)
+	{
+		cout << "Draw" << endl;
+	}
 }
 
 
@@ -180,11 +340,13 @@ int main()
 	{
 		if (g.turn % 2 == 0)
 		{
+			// Human
 			Coord c = getHumanCoord(g);
 			g.ppField[c.y][c.x] = g.human;
 		}
 		else
 		{
+			// Comp
 			Coord c = getAICoord(g);
 			g.ppField[c.y][c.x] = g.ai;
 		}
@@ -196,6 +358,8 @@ int main()
 		g.progress = getWon(g);// кто победил
 
 	} while (g.progress = IN_PROGRESS);
+
+	congrats(g);
 
 	deinitGame(g);
 	return 0;
