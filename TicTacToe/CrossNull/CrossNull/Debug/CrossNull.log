@@ -1,3 +1,3 @@
 ﻿  main.cpp
-D:\GB\CPP\Projects\CPPprojects\TicTacToe\CrossNull\CrossNull\main.cpp(309): warning C4715: getAICoord: значение возвращается не при всех путях выполнения
+D:\GB\CPP\Projects\CPPprojects\TicTacToe\CrossNull\CrossNull\main.cpp(348): warning C4715: getAICoord: значение возвращается не при всех путях выполнения
   CrossNull.vcxproj -> D:\GB\CPP\Projects\CPPprojects\TicTacToe\CrossNull\Debug\CrossNull.exe

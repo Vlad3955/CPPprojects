@@ -20,8 +20,8 @@ enum Cell : char// Таким образом обЪявляем чаровский тип
 // Структура с координатами
 struct Coord
 {
-	int32_t y{ 0 };
-	int32_t x{ 0 };
+	size_t y{ 0 };
+	size_t x{ 0 };
 
 };
 
@@ -246,6 +246,45 @@ Coord __fastcall getHumanCoord(const Game& g)
 
 Coord __fastcall getAICoord(const Game& g)
 {
+	// Предвыигрыш
+	for (size_t y = 0; y < g.SIZE; y++)
+	{
+		for (size_t x = 0; x < g.SIZE; x++)
+		{
+			if (g.ppField[y][x] == EMPTY)
+			{
+				g.ppField[y][x] = g.ai; // Гипотетический ход: комп проверяет ход на выигрышность
+				if (getWon(g) == WON_AI) // если после этого хода выиграл
+				{
+					g.ppField[y][x] = EMPTY; // возвращает как было
+					return { y, x }; // и ходит туда
+				}
+				g.ppField[y][x] = EMPTY; // в любом случае востанавливаем в пусте(скрываем читерство бота)
+			}
+		}
+		
+	}
+
+	// Предпроишная ситуация(комп мешает выиграть)
+	for (size_t y = 0; y < g.SIZE; y++)
+	{
+		for (size_t x = 0; x < g.SIZE; x++)
+		{
+			if (g.ppField[y][x] == EMPTY)
+			{
+				g.ppField[y][x] = g.human; // Гипотетический ход от лица человека: комп ходит за человека,проверяет ход на выигрышность
+				if (getWon(g) == WON_HUMAN) // если после этого хода,человек выиграл
+				{
+					g.ppField[y][x] = EMPTY; // возвращает как было
+					return { y, x }; // и ходит туда,тем самым мешает человеку выиграть
+				}
+				g.ppField[y][x] = EMPTY; // в любом случае востанавливаем в пусте(скрываем читерство бота)
+			}
+		}
+
+	}
+
+
 	if (g.ppField[1][1] == EMPTY)
 	{
 		return { 1, 1 };
@@ -301,7 +340,7 @@ Coord __fastcall getAICoord(const Game& g)
 		arr[num++] = { 1, 0 };
 	}
 
-	if (num > 0) // если есть не свободные углы
+	if (num > 0) // если есть свободные не углы
 	{
 		const size_t index = getRundomNum(0, 1000) % num; // случайный индекс свободного не угла
 		return arr[index];
@@ -312,15 +351,15 @@ void __fastcall congrats(const Game& g)
 {
 	if (g.progress == WON_HUMAN)
 	{
-		cout << "Красаучык" << endl;
+		cout << "Человек выиграл" << endl;
 	}
 	else if (g.progress == WON_AI)
 	{
-		cout << "Не красаучык" << endl;
+		cout << "Бот выиграл" << endl;
 	}
 	else if (g.progress == DRAW)
 	{
-		cout << "Draw" << endl;
+		cout << "Ничья" << endl;
 	}
 }
 
@@ -357,7 +396,7 @@ int main()
 
 		g.progress = getWon(g);// кто победил
 
-	} while (g.progress = IN_PROGRESS);
+	} while (g.progress == IN_PROGRESS);
 
 	congrats(g);
 
