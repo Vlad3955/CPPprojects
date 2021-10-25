@@ -74,16 +74,16 @@ int32_t __fastcall getRundomNum(int32_t min, int32_t max)
 void __fastcall initGame(Game& g)
 {
 	g.ppField = new Cell * [g.SIZE];
-	for (size_t i = 0; i < g.SIZE; i++)// инициализируем строки  матрицы
+	for (size_t i = 0; i < g.SIZE; i++)// создаем строки  матрицы
 	{
-		g.ppField[i] = new Cell[g.SIZE];
+		g.ppField[i] = new Cell[g.SIZE];// создаем колонки  матрицы
 	}
 
 	for (size_t y = 0; y < g.SIZE; y++)
 	{
 		for (size_t x = 0; x < g.SIZE; x++)
 		{
-			g.ppField[y][x] = EMPTY;
+			g.ppField[y][x] = EMPTY;// инициализируем строки и колонки  матрицы
 		}
 	}
 
@@ -104,9 +104,9 @@ void __fastcall initGame(Game& g)
 
 void __fastcall deinitGame(Game& g)
 {
-	for (size_t i = 0; i < g.SIZE; i++)// удаляем строки матрицы
+	for (size_t i = 0; i < g.SIZE; i++)
 	{
-		delete[] g.ppField[i];
+		delete[] g.ppField[i];// удаляем строки и колонки матрицы
 	}
 	delete[] g.ppField;
 	g.ppField = nullptr;
