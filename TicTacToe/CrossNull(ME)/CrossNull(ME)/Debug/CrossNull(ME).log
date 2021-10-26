@@ -1,5 +1,5 @@
 ﻿  libs.cpp
   main.cpp
   Создание кода...
-D:\C++\CPP\Projects\CPPprojects\TicTacToe\CrossNull(ME)\CrossNull(ME)\libs.cpp(335): warning C4715: getAICoord: значение возвращается не при всех путях выполнения
-  CrossNull(ME).vcxproj -> D:\C++\CPP\Projects\CPPprojects\TicTacToe\CrossNull(ME)\Debug\CrossNull(ME).exe
+D:\GB\CPP\Projects\CPPprojects\TicTacToe\CrossNull(ME)\CrossNull(ME)\libs.cpp(335): warning C4715: getAICoord: значение возвращается не при всех путях выполнения
+  CrossNull(ME).vcxproj -> D:\GB\CPP\Projects\CPPprojects\TicTacToe\CrossNull(ME)\Debug\CrossNull(ME).exe
