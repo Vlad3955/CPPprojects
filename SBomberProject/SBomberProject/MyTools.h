@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <string>
 
+
 namespace MyTools {
 
     // Палитра цветов от 0 до 15
@@ -28,7 +29,7 @@ namespace MyTools {
 
 	//=============================================================================================
 
-	class ScreenSingleton
+	/*class ScreenSingleton
 	{
 	public:
         static ScreenSingleton& getInstance()
@@ -43,29 +44,33 @@ namespace MyTools {
         void SetColor(ConsoleColor color);
 
 	private:
-        ScreenSingleton() { }
+        ScreenSingleton() {};
         ScreenSingleton(const ScreenSingleton& root) = delete;
         ScreenSingleton& operator=(const ScreenSingleton&) = delete;
-	};
+	};*/
 
-	
+    class ScreenSingleton
+    {
+    public:
+        static ScreenSingleton& getInstance();
+        void ClrScr();
+        void __fastcall GotoXY(double x, double y);
+        uint16_t GetMaxX();
+        uint16_t GetMaxY();
+        void SetColor(ConsoleColor color);
 
-	/*void ClrScr();
-
-	void __fastcall GotoXY(double x, double y);
-
-	uint16_t GetMaxX();
-
-	uint16_t GetMaxY();
-
-    void SetColor(ConsoleColor color);*/
+    private:
+        ScreenSingleton();
+        ScreenSingleton(const ScreenSingleton& root) = delete;
+        ScreenSingleton& operator=(const ScreenSingleton&) = delete;
+    };
 
 	//=============================================================================================
 
-    class FileLoggerSingletone
+    /*class FileLoggerSingletone
     {
     public:
-        FileLoggerSingletone& getInstance()
+        static FileLoggerSingletone& getInstance()
         {
             static FileLoggerSingletone theInstance;
             return theInstance;
@@ -76,13 +81,26 @@ namespace MyTools {
         void __fastcall WriteToLog(const std::string& str, int n);
         void __fastcall WriteToLog(const std::string& str, double d);
     private:
-        FileLoggerSingletone();
+        FileLoggerSingletone() {};
         FileLoggerSingletone(const FileLoggerSingletone& root) = delete;
         FileLoggerSingletone &operator=(const FileLoggerSingletone&) = delete;
+    };*/
+
+
+    class FileLoggerSingletone
+    {
+    public:
+        static FileLoggerSingletone& getInstance();
+        void __fastcall OpenLogFile(const std::string& FN);
+        void CloseLogFile();
+        void __fastcall WriteToLog(const std::string& str);
+        void __fastcall WriteToLog(const std::string& str, int n);
+        void __fastcall WriteToLog(const std::string& str, double d);
+    private:
+        FileLoggerSingletone();
+        FileLoggerSingletone(const FileLoggerSingletone& root) = delete;
+        FileLoggerSingletone& operator=(const FileLoggerSingletone&) = delete;
     };
-
-
-	
 
 	//=============================================================================================
 
