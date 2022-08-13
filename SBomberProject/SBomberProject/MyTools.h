@@ -104,4 +104,20 @@ namespace MyTools {
 
 	//=============================================================================================
 
+    
+    class LoggerSingleton
+    {
+    public:
+        static LoggerSingleton& getInstance();
+        void __fastcall OpenLogFile(const std::string& FN, int count);
+    private:
+        static int count;
+        static LoggerSingleton theInstance;
+        LoggerSingleton();
+        LoggerSingleton(const FileLoggerSingletone& root) = delete;
+        LoggerSingleton& operator=(const FileLoggerSingletone&) = delete;
+    };
+
+   
+
 };

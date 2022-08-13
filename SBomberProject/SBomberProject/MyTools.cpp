@@ -17,6 +17,7 @@ using namespace std;
 namespace MyTools {
 
     ofstream logOut;
+    
 
     //=============================================================================================
 
@@ -139,4 +140,17 @@ namespace MyTools {
     //=============================================================================================
 
 
+    LoggerSingleton::LoggerSingleton() {}
+
+    LoggerSingleton& LoggerSingleton::getInstance()
+    {
+        return theInstance;
+    }
+
+    void __fastcall LoggerSingleton::OpenLogFile(const string& FN, int count)
+    {
+        logOut.open(FN, ios_base::out);
+    }
+
+    
 } // namespace MyTools
