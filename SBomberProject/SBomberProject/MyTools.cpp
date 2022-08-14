@@ -140,16 +140,42 @@ namespace MyTools {
     //=============================================================================================
 
 
-    LoggerSingleton::LoggerSingleton() {}
+    LoggerSingleton::LoggerSingleton() 
+    {
+        count = 1;
+    }
 
     LoggerSingleton& LoggerSingleton::getInstance()
     {
+        static LoggerSingleton theInstance;
         return theInstance;
     }
 
-    void __fastcall LoggerSingleton::OpenLogFile(const string& FN, int count)
+    void __fastcall LoggerSingleton::WriteToLog(const string& str)
     {
-        logOut.open(FN, ios_base::out);
+        if (logOut.is_open())
+        {
+            logOut << count << "." << GetCurDateTime() << " - " << str << endl;
+        }
+        count++;
+    }
+
+    void __fastcall LoggerSingleton::WriteToLog(const string& str, int n)
+    {
+        if (logOut.is_open())
+        {
+            logOut << count << "." << GetCurDateTime() << " - " << str << n << endl;
+        }
+        count++;
+    }
+
+    void __fastcall LoggerSingleton::WriteToLog(const string& str, double d)
+    {
+        if (logOut.is_open())
+        {
+            logOut << count << "." << GetCurDateTime() << " - " << str << d << endl;
+        }
+        count++;
     }
 
     

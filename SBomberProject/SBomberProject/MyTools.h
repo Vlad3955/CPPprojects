@@ -96,7 +96,7 @@ namespace MyTools {
         void __fastcall WriteToLog(const std::string& str);
         void __fastcall WriteToLog(const std::string& str, int n);
         void __fastcall WriteToLog(const std::string& str, double d);
-    private:
+    protected:
         FileLoggerSingletone();
         FileLoggerSingletone(const FileLoggerSingletone& root) = delete;
         FileLoggerSingletone& operator=(const FileLoggerSingletone&) = delete;
@@ -105,14 +105,15 @@ namespace MyTools {
 	//=============================================================================================
 
     
-    class LoggerSingleton
+    class LoggerSingleton : public FileLoggerSingletone
     {
     public:
         static LoggerSingleton& getInstance();
-        void __fastcall OpenLogFile(const std::string& FN, int count);
+        void __fastcall WriteToLog(const std::string& str);
+        void __fastcall WriteToLog(const std::string& str, int n);
+        void __fastcall WriteToLog(const std::string& str, double d);
     private:
-        static int count;
-        static LoggerSingleton theInstance;
+        int count;
         LoggerSingleton();
         LoggerSingleton(const FileLoggerSingletone& root) = delete;
         LoggerSingleton& operator=(const FileLoggerSingletone&) = delete;
